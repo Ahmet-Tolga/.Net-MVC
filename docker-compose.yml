@@ -1,23 +1,26 @@
 version: '3.8'
 
 services:
-  mssql:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "5055:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_URI=Server=db,1433;Database=YourDatabaseName;User=sa;Password=YourStrong@Passw0rd;Trusted_Connection=False;MultipleActiveResultSets=True;TrustServerCertificate=True;
+
+  db:
     image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sql_server
+    container_name: db
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=YourStrong@Passw0rd
-    ports:
-      - "1433:1433"
-    networks:
-      - sql_network
     volumes:
-      - mssql_data:/var/opt/mssql
-
-networks:
-  sql_network:
-    driver: bridge
+      - db_volume:/var/opt/mssql
 
 volumes:
-  mssql_data:
-    driver: local
+  db_volume:

@@ -85,4 +85,4 @@ node_modules/
 appsettings.development.json
 
 # Entity Framework Core Migrations directory
-Migrations/
+# Migrations/
